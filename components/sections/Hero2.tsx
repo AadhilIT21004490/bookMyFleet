@@ -16,24 +16,24 @@ export default function Hero2() {
 								<SwiperSlide>
 									<div className="item-banner-slide banner-1">
 										<div className="container">
-											<span className="btn background-brand-2 px-3 py-3 rounded-12 text-sm-bold text-dark">+3600 cars for you</span>
-											<h1 className="mt-20 mb-20 color-white">Find your next vehicle today</h1>
+											<span className="btn background-brand-2 px-3 py-3 rounded-12 text-sm-bold text-dark">+150 cars for you</span>
+											<h1 className="mt-20 mb-20 color-white">Rent your next vehicle today</h1>
 											<h6 className="color-white heading-6-medium pb-lg-0 pb-4">
-												Browse our diverse inventory and enjoy a seamless buying experience <br />
-												with expert support every step of the way
+												Savor every moment of your getaway with loved ones in your rental ride —  <br />
+												every mile feels like your own recipe for adventure.
 											</h6>
-											<span className="text-lg-medium color-white d-lg-none">Get 5% discount when <Link className="text-primary" href="#install-app">Ordering via APP</Link></span>
+											<span className="text-lg-medium color-white d-lg-none">Make a booking <Link className="text-primary" href="#install-app">via Bookmyfleet.com</Link></span>
 										</div>
 									</div>
 								</SwiperSlide>
 								<SwiperSlide>
 									<div className="item-banner-slide banner-2">
 										<div className="container">
-											<span className="btn background-brand-2 px-3 py-3 rounded-12 text-sm-bold text-dark">Best car rental system</span>
+											<span className="btn background-brand-2 px-3 py-3 rounded-12 text-sm-bold text-dark">Ocean of vehicles</span>
 											<h1 className="mt-20 mb-20 color-white">Discover your next ride today</h1>
 											<h6 className="color-white heading-6-medium">
-												Explore our wide selection and enjoy a smooth purchasing journey, <br />
-												with expert assistance at every turn
+												Turn every trip into a celebration — where comfort meets convenience, and your <br />
+												rental feels like the perfect ingredient for unforgettable memories.
 											</h6>
 										</div>
 									</div>
@@ -58,7 +58,7 @@ export default function Hero2() {
 							<HeroSearch />
 						</div>
 						<div className="align-items-center justify-content-between pt-40 d-none d-lg-flex">
-							<span className="text-lg-medium color-white">Get 5% discount when <Link className="text-primary" href="#install-app">Ordering via APP</Link></span>
+							<span className="text-lg-medium color-white">Make a booking <Link className="text-primary" href="www.bookmyfleet.com">via Bookmyfleet.com</Link></span>
 							<div className="box-button-slider box-button-slider-team justify-content-end">
 								<div className="swiper-button-prev swiper-button-prev-style-1 swiper-button-prev-2" tabIndex={0} role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-9c1b729b91027a37b">
 									<svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 16 16" fill="none">

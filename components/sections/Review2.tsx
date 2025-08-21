@@ -15,12 +15,12 @@ export default function Review2() {
 								<SwiperSlide>
 									<div className="item-banner-slide-review d-flex align-items-center rounded-12">
 										<div className="ps-md-5 ps-2 position-relative z-1">
-											<span className="text-primary text-md-bold">CAR REVIEW</span>
+											<span className="text-primary text-md-bold">VACATIONS</span>
 											<h3 className="mt-20 mb-20 color-white">
-												Hyundai Tucson Plug-In <br className="d-none d-md-block" />
-												Hybrid 2025 review
+												Ready to <br className="d-none d-md-block" />escape the ordinary?
+											
 											</h3>
-											<p className="text-lg-medium color-white">The Tucson Plug-in Hybrid is easy to drive and provides a sufficient all-electric range.</p>
+											<p className="text-lg-medium color-white">Hit the road in comfort and style your dream vacation starts with the right ride.</p>
 											<Link href="#" className="btn btn-primary mt-30">
 												View Details
 												<svg xmlns="http://www.w3.org/2000/svg" width={24} height={25} viewBox="0 0 24 25" fill="none">
@@ -33,12 +33,12 @@ export default function Review2() {
 								<SwiperSlide>
 									<div className="item-banner-slide-review banner-3 d-flex align-items-center rounded-12">
 										<div className="ps-md-5 ps-2 position-relative z-1">
-											<span className="text-primary text-md-bold">CAR REVIEW</span>
+											<span className="text-primary text-md-bold">WEDDING</span>
 											<h3 className="mt-20 mb-20 color-white">
-												2025 Mazda CX-50 <br className="d-none d-md-block" />
-												Review and news
+												Planning the wedding<br className="d-none d-md-block" />with a perfect moment?
+											
 											</h3>
-											<p className="text-lg-medium color-white">The Tucson Plug-in Hybrid is easy to drive and provides a sufficient all-electric range.</p>
+											<p className="text-lg-medium color-white">Make your big moment unforgettable with elegant vehicles tailored for weddings.</p>
 											<Link href="#" className="btn btn-primary mt-30">
 												View Details
 												<svg xmlns="http://www.w3.org/2000/svg" width={24} height={25} viewBox="0 0 24 25" fill="none">

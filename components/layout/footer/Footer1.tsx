@@ -9,8 +9,8 @@ export default function Footer1() {
 					<div className="footer-top">
 						<div className="row align-items-center">
 							<div className="col-lg-5 col-md-6 text-center text-md-start">
-								<h5 className="color-white wow fadeInDown">Subscribe to see time based deals price drops the moment you
-									sign up!</h5>
+								<h5 className="color-white wow fadeInDown">Subscribe to see the latest vehicle's availability - 
+									sign up now!</h5>
 							</div>
 							<div className="col-lg-7 col-md-6 text-center text-md-end mt-md-0 mt-4">
 								<div className="d-flex align-items-center justify-content-center justify-content-md-end">

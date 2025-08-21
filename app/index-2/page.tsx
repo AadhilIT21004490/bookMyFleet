@@ -25,13 +25,13 @@ export default function Index2() {
 				<CarsListing3 />
 				<Cta4 />
 				<Review2 />
+				<WhyUs1 />
 				<Static1 />
 				<CarsListing4 />
 				<Brand2 />
-				<Team1 />
-				<Cta5 />
+				{/* <Team1 /> */}
+				{/* <Cta5 /> */}
 				<Testimonials />
-				<WhyUs1 />
 				<Blog2 />
 				<App />
 			</Layout>

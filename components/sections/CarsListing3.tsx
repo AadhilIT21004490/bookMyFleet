@@ -2,8 +2,89 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link"
 import { swiperGroup2 } from '@/util/swiperOptions'
+import { Crown } from "lucide-react";
 
 export default function CarsListing3() {
+	const cars = [
+		{
+			id: 1,
+			name: "Audi A3 1.6 TDI S line",
+			image: "/assets/imgs/cars-listing/cars-listing-3/car-1.png",
+			link: "/cars-details-1",
+			rating: 4.96,
+			reviews: 672,
+			miles: "72.491km",
+			gear: "Automatic",
+			fuel: "Diesel",
+			seats: "7 seats",
+			price: "$35.62",
+		},
+		{
+			id: 2,
+			name: "BMW 320d xDrive M",
+			image: "/assets/imgs/cars-listing/cars-listing-3/car-2.png",
+			link: "/cars-details-1",
+			rating: 4.96,
+			reviews: 672,
+			miles: "72.491km",
+			gear: "Automatic",
+			fuel: "Diesel",
+			seats: "7 seats",
+			price: "$35.62",
+		},
+		{
+			id: 3,
+			name: "Mercedes-Benz C220d",
+			image: "/assets/imgs/cars-listing/cars-listing-3/car-3.png",
+			link: "/cars-details-1",
+			rating: 4.96,
+			reviews: 672,
+			miles: "72.491km",
+			gear: "Automatic",
+			fuel: "Diesel",
+			seats: "7 seats",
+			price: "$35.62",
+		},
+		{
+			id: 4,
+			name: "Volkswagen Golf GTD",
+			image: "/assets/imgs/cars-listing/cars-listing-3/car-4.png",
+			link: "/cars-details-1",
+			rating: 4.96,
+			reviews: 672,
+			miles: "72.491km",
+			gear: "Automatic",
+			fuel: "Diesel",
+			seats: "7 seats",
+			price: "$35.62",
+		},
+		{
+			id: 5,
+			name: "Volvo S60 D4 R-Design",
+			image: "/assets/imgs/cars-listing/cars-listing-3/car-5.png",
+			link: "/cars-details-1",
+			rating: 4.96,
+			reviews: 672,
+			miles: "72.491km",
+			gear: "Automatic",
+			fuel: "Diesel",
+			seats: "7 seats",
+			price: "$35.62",
+		},
+		{
+			id: 6,
+			name: "Jaguar XE 2.0d R-Sport",
+			image: "/assets/imgs/cars-listing/cars-listing-3/car-6.png",
+			link: "/cars-details-1",
+			rating: 4.96,
+			reviews: 672,
+			miles: "72.491km",
+			gear: "Automatic",
+			fuel: "Diesel",
+			seats: "7 seats",
+			price: "$35.62",
+		},
+	];
 	return (
 		<>
 
@@ -11,11 +92,23 @@ export default function CarsListing3() {
 				<div className="container">
 					<div className="row align-items-end">
 						<div className="col-lg-6 mb-30 text-center text-lg-start">
-							<h2 className="neutral-1000">Popular Vehicles</h2>
-							<p className="text-xl-medium neutral-500">Favorite vehicles based on customer reviews</p>
+							<h2 className="neutral-1000 d-flex align-items-center justify-content-center justify-content-lg-start gap-2">
+								Best Condition Vehicles
+
+								
+							</h2>
+							<div className="badge bg-warning text-dark d-inline-flex align-items-center gap-1 p-2 rounded-pill w-auto">
+								<Crown size={15} className="text-dark" />
+								SPONSORED
+							</div>
+
+							<p className="text-xl-medium neutral-500">
+								Favorite vehicles based on customer reviews
+							</p>
 						</div>
 						<div className="col-lg-6 mb-30">
 							<div className="d-flex align-items-center justify-content-center justify-content-lg-end popular-categories">
+								
 								<div className="dropdown dropdown-filter">
 									<button className="btn btn-dropdown dropdown-toggle m-0" id="dropdownCategory" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Categories</span></button>
 									<ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownCategory">
@@ -40,21 +133,6 @@ export default function CarsListing3() {
 										<li><Link className="dropdown-item" href="#">Hydrogen</Link></li>
 									</ul>
 								</div>
-								<div className="dropdown dropdown-filter">
-									<button className="btn btn-dropdown dropdown-toggle m-0" id="dropdownCategory" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Review / Rating</span></button>
-									<ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownCategory">
-										<li><Link className="dropdown-item active" href="#">Newest</Link></li>
-										<li><Link className="dropdown-item" href="#">Oldest</Link></li>
-									</ul>
-								</div>
-								<div className="dropdown dropdown-filter">
-									<button className="btn btn-dropdown dropdown-toggle m-0" id="dropdownCategory" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Price range</span></button>
-									<ul className="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownCategory">
-										<li><Link className="dropdown-item active" href="#">$10 - $100</Link></li>
-										<li><Link className="dropdown-item" href="#">$100 - $1.000</Link></li>
-										<li><Link className="dropdown-item" href="#">$1.000 - $10.000</Link></li>
-									</ul>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -62,374 +140,50 @@ export default function CarsListing3() {
 						<div className="box-swiper mt-30">
 							<Swiper {...swiperGroup2} className="swiper-container swiper-group-2 swiper-group-journey">
 								<div className="swiper-wrapper">
-									<SwiperSlide>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-1.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
+									{cars.map((car, index) => (
+										<SwiperSlide key={car.id}>
+											<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
+												<div className="card-image w-100">
+													<Link href={car.link}>
+														<img src={car.image} alt={car.name} />
+													</Link>
 												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Audi A3 1.6 TDI S line</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
+												<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
+													<div className="card-rating position-relative start-0 top-0">
+														<div className="card-right">
+															<span className="rating shadow-none border-0 bg-transparent">
+																{car.rating} <span className="text-sm-medium neutral-500">({car.reviews} reviews)</span>
+															</span>
 														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
 													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-2.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
+													<div className="card-title pb-1">
+														<Link className="heading-6 neutral-1000" href={car.link}>
+															{car.name}
+														</Link>
 													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">BMW 320d xDrive M</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
+													<div className="card-program">
+														<div className="card-facitlities border-0 pb-3">
+															<p className="card-miles text-md-medium">{car.miles}</p>
+															<p className="card-gear text-md-medium">{car.gear}</p>
+															<p className="card-fuel text-md-medium">{car.fuel}</p>
+															<p className="card-seat text-md-medium">{car.seats} seats</p>
 														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-3.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Mercedes-Benz C220d</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
+														<div className="endtime border-top pt-4">
+															<div className="card-price">
+																<p className="text-md-medium neutral-500 me-2">From</p>
+																<h6 className="heading-6 neutral-1000">${car.price}</h6>
+															</div>
+															<div className="card-button">
+																<Link className="btn btn-gray" href={car.link}>
+																	Book Now
+																</Link>
+															</div>
 														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
 													</div>
 												</div>
 											</div>
-										</div>
-									</SwiperSlide>
-									<SwiperSlide>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-4.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Volkswagen Golf GTD</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-5.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Volvo S60 D4 R-Design</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-6.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Jaguar XE 2.0d R-Sport</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</SwiperSlide>
-									<SwiperSlide>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-1.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Audi A3 1.6 TDI S line</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-2.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">BMW 320d xDrive M</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-3.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Mercedes-Benz C220d</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</SwiperSlide>
-									<SwiperSlide>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-4.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Volkswagen Golf GTD</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-5.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Volvo S60 D4 R-Design</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className="card-journey-small card-journey-small-listing-3 background-0 d-flex flex-md-row flex-column align-items-center mw-100 position-relative">
-											<div className="card-image w-100">
-												<Link href="/cars-details-1">
-													<img src="/assets/imgs/cars-listing/cars-listing-3/car-6.png" alt="Carento" />
-												</Link>
-											</div>
-											<div className="card-info p-4 mt-0 position-relative end-0 h-100 w-lg-55 rounded-12">
-												<div className="card-rating position-relative start-0 top-0">
-													<div className="card-right">
-														<span className="rating shadow-none border-0 bg-transparent"> 4.96 <span className="text-sm-medium neutral-500">(672 reviews)</span> </span>
-													</div>
-												</div>
-												<div className="card-title pb-1"><Link className="heading-6 neutral-1000" href="/cars-details-1">Jaguar XE 2.0d R-Sport</Link></div>
-												<div className="card-program">
-													<div className="card-facitlities border-0 pb-3">
-														<p className="card-miles text-md-medium">72.491km</p>
-														<p className="card-gear text-md-medium">Automatic</p>
-														<p className="card-fuel text-md-medium">Diesel</p>
-														<p className="card-seat text-md-medium">7 seats</p>
-													</div>
-													<div className="endtime border-top pt-4">
-														<div className="card-price">
-															<p className="text-md-medium neutral-500 me-2">From</p>
-															<h6 className="heading-6 neutral-1000">$35.62</h6>
-														</div>
-														<div className="card-button"><Link className="btn btn-gray" href="/cars-details-1">Book Now</Link></div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</SwiperSlide>
+										</SwiperSlide>
+									))}
 								</div>
 							</Swiper>
 						</div>

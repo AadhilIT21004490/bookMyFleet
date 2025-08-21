@@ -8,6 +8,13 @@ export default function HeroSearch() {
 	return (
 		<>
 			<div className="box-bottom-search background-card">
+				<div className="item-search item-search-2">
+					<input
+						type="text"
+						className="form-control text-black"
+						placeholder="Search Vehicle..."
+					/>
+				</div>
 				<div className="item-search">
 					<label className="text-sm-bold neutral-500">Pick Up Location</label>
 					<Dropdown className="dropdown">
@@ -25,23 +32,7 @@ export default function HeroSearch() {
 						</Dropdown.Menu>
 					</Dropdown>
 				</div>
-				<div className="item-search item-search-2">
-					<label className="text-sm-bold neutral-500">Drop Off Location</label>
-					<Dropdown className="dropdown">
-						<Dropdown.Toggle as="div" className="btn btn-secondary dropdown-toggle btn-dropdown-search location-search" >Delaware, USA</Dropdown.Toggle>
-						<Dropdown.Menu as="ul" className="dropdown-menu">
-							<li>
-								<Link className="dropdown-item" href="#">Paris, France</Link>
-							</li>
-							<li>
-								<Link className="dropdown-item" href="#">Tokyo, Japan</Link>
-							</li>
-							<li>
-								<Link className="dropdown-item" href="#">New York City, USA</Link>
-							</li>
-						</Dropdown.Menu>
-					</Dropdown>
-				</div>
+				
 				<div className="item-search item-search-3">
 					<label className="text-sm-bold neutral-500">Pick Up Date &amp; Time</label>
 					<div className="box-calendar-date">
