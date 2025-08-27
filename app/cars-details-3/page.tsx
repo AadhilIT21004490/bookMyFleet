@@ -1,7 +1,7 @@
 'use client'
 import MyDatePicker from '@/components/elements/MyDatePicker'
 import Layout from "@/components/layout/Layout"
-import { Calendar, Calendar1, Info, LocateIcon, Map, MapPin, PhoneCall, Share, Share2 } from 'lucide-react'
+import { ArrowBigRight, ArrowRight, Calendar, Calendar1, Info, LocateIcon, Map, MapPin, PhoneCall, Share, Share2 } from 'lucide-react'
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import Marquee from 'react-fast-marquee'
@@ -51,6 +51,7 @@ export default function CarsDetails3() {
 	const [slider2, setSlider2] = useState(null)
 
 	const [showContact, setShowContact] = useState(false);
+	const [termsChecked, setTermsChecked] = useState(false);
 
 	// Contact details
 	const mobileNumber = "+94756685974";
@@ -463,44 +464,14 @@ export default function CarsDetails3() {
 													onClick={() => setShowContact(true)}
 												>
 													Book this vehicle{" "}
-													<svg
-														width={16}
-														height={16}
-														viewBox="0 0 16 16"
-														fill="none"
-														xmlns="http://www.w3.org/2000/svg"
-														className="ms-2"
-													>
-														<path
-															d="M8 15L15 8L8 1M15 8L1 8"
-															stroke="currentColor"
-															strokeWidth="1.5"
-															strokeLinecap="round"
-															strokeLinejoin="round"
-														/>
-													</svg>
+													<ArrowRight size={20}/>
 												</button>
 												<Link
 													href="#"
 													className="btn btn-primary py-3 mt-2 w-100 rounded-3 d-flex justify-content-center align-items-center"
 												>
 													See all vehicles of Dilka rent a car{" "}
-													<svg
-														width={16}
-														height={16}
-														viewBox="0 0 16 16"
-														fill="none"
-														xmlns="http://www.w3.org/2000/svg"
-														className="ms-2"
-													>
-														<path
-															d="M8 15L15 8L8 1M15 8L1 8"
-															stroke="currentColor"
-															strokeWidth="1.5"
-															strokeLinecap="round"
-															strokeLinejoin="round"
-														/>
-													</svg>
+													<ArrowRight size={20}/>
 												</Link>
 											</div>
 										</div>
@@ -600,30 +571,16 @@ export default function CarsDetails3() {
 								aria-labelledby="contactModalLabel"
 								style={{
 									backgroundColor: "rgba(0,0,0,0.5)",
-									backdropFilter: "blur(6px)",       // Add this for blur
+									backdropFilter: "blur(6px)", // Blur background
 									WebkitBackdropFilter: "blur(6px)", // Safari support
 								}}
 							>
-								<div
-									className="modal-dialog modal-dialog-centered"
-									role="document"
-								>
+								<div className="modal-dialog modal-dialog-centered" role="document">
 									<div className="modal-content p-4">
-										<div className="box-info-contact mb-3">
-											<p className="text-md-medium mobile-phone neutral-1000 mb-1">
-												<span className="text-md-bold">Mobile:</span>{" "}
-												{showContact ? mobileNumber : maskNumber(mobileNumber)}
-											</p>
-											<p className="text-md-medium whatsapp neutral-1000 mb-1">
-												<span className="text-md-bold">WhatsApp:</span>{" "}
-												{showContact ? mobileNumber : maskNumber(mobileNumber)}
-											</p>
-											<p className="text-md-medium email neutral-1000">
-												<span className="text-md-bold">Email:</span> dilka@gmail.com
-											</p>
-										</div>
-
-										<div className="mx-auto border rounded-3 text-danger" style={{ maxWidth: '600px', textAlign: 'center' }}>
+										<div
+											className="mx-auto border rounded-3 card card-body"
+											style={{ maxWidth: "600px", textAlign: "center" }}
+										>
 											Please be advised that from this point forward, it is solely your
 											responsibility to inspect the vehicle and verify the credibility of
 											the seller prior to confirming the booking. Bookmyfleet.com will
@@ -631,27 +588,48 @@ export default function CarsDetails3() {
 											after this stage of the process.
 										</div>
 
+										{/* Terms and Conditions Checkbox */}
+										<div className="form-check mt-4 text-start" style={{ maxWidth: "600px", margin: "20px auto" }}>
+											<input
+												className="form-check-input"
+												type="checkbox"
+												id="termsCheckbox"
+												checked={termsChecked}
+												onChange={() => setTermsChecked(!termsChecked)}
+											/>
+											<label className="form-check-label" style={{textAlign: "center" }} htmlFor="termsCheckbox">
+												I confirm that I have read and understood the{" "}
+												<Link href="/term" className="text-primary-dark">
+													<strong>Terms and Conditions</strong>
+												</Link>
+												, and I agree to abide by them.
+											</label>
+										</div>
+
+										{/* WhatsApp Button - enabled only when checkbox is checked */}
 										<button
 											type="button"
-											className="btn btn-primary py-3 w-100 rounded-3 mt-5"
+											className="btn btn-primary py-3 w-100 rounded-3 mt-3"
+											disabled={!termsChecked}
 										>
 											<a
 												href={`https://wa.me/${mobileNumber.replace(/\D/g, "")}`}
 												target="_blank"
 												rel="noopener noreferrer"
+												className="d-flex align-items-center justify-content-center text-black text-decoration-none"
 											>
 												<PhoneCall size={20} className="me-2" />
 												Book This Vehicle via WhatsApp
 											</a>
 										</button>
+
 										<button
 											type="button"
 											onClick={() => setShowContact(false)}
-											className="btn btn-secondary py-3 w-100 rounded-3 mt-5"
+											className="btn btn-secondary py-3 w-100 rounded-3 mt-3"
 										>
 											Close
 										</button>
-
 									</div>
 								</div>
 							</div>
