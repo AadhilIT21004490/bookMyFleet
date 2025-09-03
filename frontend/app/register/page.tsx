@@ -6,8 +6,8 @@ import Layout from "@/components/layout/Layout";
 
 export default function RegisterMultiStep() {
   const [step, setStep] = useState(1);
-
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState(false);
+  const initialFormState = {
     // Step 1 - Personal Details
     fullName: "",
     email: "",
@@ -32,7 +32,34 @@ export default function RegisterMultiStep() {
     proofOfAddress: null,
     rentalAgreement: null,
     businessProfilePicture: null,
-  });
+  };
+  const [formData, setFormData] = useState(initialFormState);
+  // const [formData, setFormData] = useState({
+  //   // Step 1 - Personal Details
+  //   fullName: "",
+  //   email: "",
+  //   phone: "",
+  //   password: "",
+  //   confirmPassword: "",
+  //   languages: { English: false, Tamil: false, Sinhala: false },
+  //   nicNumber: "",
+  //   emergencyContact: "",
+
+  //   // Step 2 - Business Details
+  //   businessName: "",
+  //   businessType: "Individual", // default
+  //   businessRegNumber: "",
+  //   officeAddress: "",
+  //   officeContact: "",
+  //   operatingCity: "",
+
+  //   // Step 3 - Documentations (files)
+  //   nicPicture: null,
+  //   brDocument: null,
+  //   proofOfAddress: null,
+  //   rentalAgreement: null,
+  //   businessProfilePicture: null,
+  // });
 
   // Helper for input changes (text, radio, checkbox)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,6 +147,8 @@ export default function RegisterMultiStep() {
     }
 
     try {
+      setLoading(true); // show loading
+
       const formDataToSend = new FormData();
 
       // Step 1 - Personal Details
@@ -174,12 +203,18 @@ export default function RegisterMultiStep() {
       if (res.ok) {
         alert("Registration successful!");
         console.log(data);
+        
+          // ✅ reset form
+        setFormData(initialFormState);
+        setStep(1); // go back to step 1
       } else {
         alert(data.message || "Registration failed");
       }
     } catch (err: any) {
       console.error(err.message);
       alert("Something went wrong while submitting the form");
+    } finally {
+      setLoading(false); // hide loading
     }
   };
 
@@ -524,9 +559,18 @@ export default function RegisterMultiStep() {
                   <ChevronRight size={18} className="ms-2" />
                 </Button>
               ) : (
-                <Button className="btn btn-secondary rounded-3.5" type="submit">
-                  Submit
-                  <SendHorizonal size={17} className="" />
+                <Button className="btn btn-secondary rounded-3.5" type="submit" disabled={loading}>
+                  {loading ? (
+    <>
+      <span className="spinner-border spinner-border-sm me-2"></span>
+      Submitting...
+    </>
+  ) : (
+    <>
+      Submit
+      <SendHorizonal size={17} className="ms-2" />
+    </>
+  )}
                 </Button>
               )}
             </div>
