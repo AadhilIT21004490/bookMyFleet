@@ -1,0 +1,7 @@
+- vendor register form -
+- a loading indicator to show when submit the form
+- after successfull submission clear all the data in the form
+- redirect to a page or new modal to tell we will analyise the data carefully and let you know in short while
+- when click on register dont go directly to register form instead go to a page to tell about this service and benifits of join in our platform and payment details also
+- then only when click continue we have to direct them to register form page
+- dont use react-hot-toast or any to show toast messages in register page ( show it in the UI below or over the submit button)

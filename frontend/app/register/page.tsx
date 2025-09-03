@@ -1,30 +1,30 @@
-'use client'
-import { useState } from 'react'
-import { Form, Button, Col, Row, InputGroup } from 'react-bootstrap'
-import { ChevronLeft, ChevronRight, SendHorizonal } from 'lucide-react'
-import Layout from '@/components/layout/Layout'
+"use client";
+import { useState } from "react";
+import { Form, Button, Col, Row, InputGroup } from "react-bootstrap";
+import { ChevronLeft, ChevronRight, SendHorizonal } from "lucide-react";
+import Layout from "@/components/layout/Layout";
 
 export default function RegisterMultiStep() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
     // Step 1 - Personal Details
-    fullName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
     languages: { English: false, Tamil: false, Sinhala: false },
-    nicNumber: '',
-    emergencyContact: '',
+    nicNumber: "",
+    emergencyContact: "",
 
     // Step 2 - Business Details
-    businessName: '',
-    businessType: 'Individual', // default
-    businessRegNumber: '',
-    officeAddress: '',
-    officeContact: '',
-    operatingCity: '',
+    businessName: "",
+    businessType: "Individual", // default
+    businessRegNumber: "",
+    officeAddress: "",
+    officeContact: "",
+    operatingCity: "",
 
     // Step 3 - Documentations (files)
     nicPicture: null,
@@ -32,59 +32,62 @@ export default function RegisterMultiStep() {
     proofOfAddress: null,
     rentalAgreement: null,
     businessProfilePicture: null,
-  })
+  });
 
   // Helper for input changes (text, radio, checkbox)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { type, name, value, checked, files } = e.target
+    const { type, name, value, checked, files } = e.target;
 
-    if (type === 'checkbox' && name === 'languages') {
+    if (type === "checkbox" && name === "languages") {
       // Multi-checkbox for languages
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         languages: { ...prev.languages, [value]: checked },
-      }))
-    } else if (type === 'file') {
+      }));
+    } else if (type === "file") {
       // File upload
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [name]: files && files.length > 0 ? files[0] : null,
-      }))
+      }));
     } else if (type === "radio") {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [name]: value,
-      }))
+      }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [name]: value,
-      }))
+      }));
     }
-  }
+  };
 
   // Step validation example for moving next
   const isStepValid = () => {
     if (step === 1) {
       return (
-        formData.fullName.trim() !== '' &&
-        formData.email.trim() !== '' &&
-        formData.phone.trim() !== '' &&
-        formData.password !== '' &&
+        formData.fullName.trim() !== "" &&
+        formData.email.trim() !== "" &&
+        formData.phone.trim() !== "" &&
+        formData.password !== "" &&
         formData.password === formData.confirmPassword &&
-        (formData.languages.English || formData.languages.Tamil || formData.languages.Sinhala) &&
-        formData.nicNumber.trim() !== '' &&
-        formData.emergencyContact.trim() !== ''
-      )
+        (formData.languages.English ||
+          formData.languages.Tamil ||
+          formData.languages.Sinhala) &&
+        formData.nicNumber.trim() !== "" &&
+        formData.emergencyContact.trim() !== ""
+      );
     }
     if (step === 2) {
       return (
-        formData.businessName.trim() !== '' &&
-        (formData.businessType === 'Individual' || formData.businessType === 'Registered') &&
-        formData.officeAddress.trim() !== '' &&
-        formData.officeContact.trim() !== '' &&
-        formData.operatingCity.trim() !== ''
-      )
+        formData.businessName.trim() !== "" &&
+        (formData.businessType === "Individual" ||
+          formData.businessType === "Registered") &&
+        formData.officeAddress.trim() !== "" &&
+        formData.officeContact.trim() !== "" &&
+        formData.operatingCity.trim() !== ""
+      );
     }
     if (step === 3) {
       return (
@@ -92,322 +95,444 @@ export default function RegisterMultiStep() {
         formData.proofOfAddress !== null &&
         formData.rentalAgreement !== null &&
         formData.businessProfilePicture !== null
-      )
+      );
     }
-    return true
-  }
+    return true;
+  };
 
   const handleNext = () => {
     if (isStepValid()) {
-      setStep(step + 1)
+      setStep(step + 1);
     } else {
-      alert('Please fill in all required fields correctly to proceed.')
+      alert("Please fill in all required fields correctly to proceed.");
     }
-  }
+  };
 
   const handleBack = () => {
-    setStep(step - 1)
-  }
+    setStep(step - 1);
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (isStepValid()) {
-      // Submit formData here (convert files to FormData if sending to API)
-      alert('Registration submitted successfully! (Implement API call)')
-    } else {
-      alert('Please fill in all required fields correctly.')
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isStepValid()) {
+      alert("Please fill in all required fields correctly.");
+      return;
     }
-  }
+
+    try {
+      const formDataToSend = new FormData();
+
+      // Step 1 - Personal Details
+      formDataToSend.append("fullName", formData.fullName);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("phone", formData.phone);
+      formDataToSend.append("password", formData.password);
+      formDataToSend.append("nicNumber", formData.nicNumber);
+      formDataToSend.append("emergencyContact", formData.emergencyContact);
+
+      // Languages (convert object -> JSON string)
+      formDataToSend.append("languages", JSON.stringify(formData.languages));
+
+      // Step 2 - Business Details
+      formDataToSend.append("businessName", formData.businessName);
+      formDataToSend.append("businessType", formData.businessType);
+      formDataToSend.append("businessRegNumber", formData.businessRegNumber);
+      formDataToSend.append("officeAddress", formData.officeAddress);
+      formDataToSend.append("officeContact", formData.officeContact);
+      formDataToSend.append("operatingCity", formData.operatingCity);
+
+      // Step 3 - Files
+      if (formData.nicPicture)
+        formDataToSend.append("nicPicture", formData.nicPicture);
+      if (formData.brDocument)
+        formDataToSend.append("brDocument", formData.brDocument);
+      if (formData.proofOfAddress)
+        formDataToSend.append("proofOfAddress", formData.proofOfAddress);
+      if (formData.rentalAgreement)
+        formDataToSend.append("rentalAgreement", formData.rentalAgreement);
+      if (formData.businessProfilePicture)
+        formDataToSend.append(
+          "businessProfilePicture",
+          formData.businessProfilePicture
+        );
+      // todo:add textarea for business overview
+      formDataToSend.append(
+        "businessOverview",
+        "This is a sample business overview. Todo: add a text area for this."
+      );
+
+      // 🔑 API call
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/vendor`, {
+        method: "POST",
+        headers: {
+          "User-Agent": navigator.userAgent,
+        },
+        body: formDataToSend,
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Registration successful!");
+        console.log(data);
+      } else {
+        alert(data.message || "Registration failed");
+      }
+    } catch (err: any) {
+      console.error(err.message);
+      alert("Something went wrong while submitting the form");
+    }
+  };
 
   return (
     <Layout footerStyle={1}>
       <div className="container pt-5 pb-5" style={{ maxWidth: 700 }}>
         <h3 className="mb-4 text-center">Account Registration</h3>
-		<div className='border rounded-5 shadow my-5 p-5'>
-        <Form onSubmit={handleSubmit}>
-          {/* Step Indicators */}
-          <div className="mb-4 d-flex justify-content-between">
-			{["PERSONAL DETAILS", "BUSINESS DETAILS", "DOCUMENTS"].map((label, index) => {
-				const firstWord = label.split(' ')[0]; // Get first word e.g. "PERSONAL"
+        <div className="border rounded-5 shadow my-5 p-5">
+          <Form onSubmit={handleSubmit}>
+            {/* Step Indicators */}
+            <div className="mb-4 d-flex justify-content-between">
+              {["PERSONAL DETAILS", "BUSINESS DETAILS", "DOCUMENTS"].map(
+                (label, index) => {
+                  const firstWord = label.split(" ")[0]; // Get first word e.g. "PERSONAL"
 
-				return (
-				<div
-					key={label}
-					className={`step-indicator rounded-5 text-center w-50 ${
-					step === index + 1 ? 'bg-primary text-black shadow' : 'bg-light text-muted'
-					}`}
-					style={{ width: 120, height: 40, lineHeight: '40px', cursor: 'pointer', borderRadius: 20 }}
-					onClick={() => setStep(index + 1)}
-				>
-					<strong>
-					<span className="d-none d-md-inline">{label}</span>
-					<span className="d-inline d-md-none">{firstWord}</span>
-					</strong>
-				</div>
-				);
-			})}
-			</div>
+                  return (
+                    <div
+                      key={label}
+                      className={`step-indicator rounded-5 text-center w-50 ${
+                        step === index + 1
+                          ? "bg-primary text-black shadow"
+                          : "bg-light text-muted"
+                      }`}
+                      style={{
+                        width: 120,
+                        height: 40,
+                        lineHeight: "40px",
+                        cursor: "pointer",
+                        borderRadius: 20,
+                      }}
+                      onClick={() => setStep(index + 1)}
+                    >
+                      <strong>
+                        <span className="d-none d-md-inline">{label}</span>
+                        <span className="d-inline d-md-none">{firstWord}</span>
+                      </strong>
+                    </div>
+                  );
+                }
+              )}
+            </div>
 
+            {/* Step 1 - Personal Details */}
+            {step === 1 && (
+              <>
+                <Form.Group className="mb-3" controlId="fullName">
+                  <Form.Label>
+                    <strong>Full name *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-          {/* Step 1 - Personal Details */}
-          {step === 1 && (
-            <>
-              <Form.Group className="mb-3" controlId="fullName">
-                <Form.Label><strong>Full name *</strong></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="email">
+                  <Form.Label>
+                    <strong>Email Address *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label><strong>Email Address *</strong></Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="phone">
+                  <Form.Label>
+                    <strong>Phone Number *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-              <Form.Group className="mb-3" controlId="phone">
-                <Form.Label><strong>Phone Number *</strong></Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="password">
+                  <Form.Label>
+                    <strong>Password *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-              <Form.Group className="mb-3" controlId="password">
-                <Form.Label><strong>Password *</strong></Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="confirmPassword">
+                  <Form.Label>
+                    <strong>Confirm Password *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    isInvalid={formData.password !== formData.confirmPassword}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Passwords do not match.
+                  </Form.Control.Feedback>
+                </Form.Group>
 
-              <Form.Group className="mb-3" controlId="confirmPassword">
-                <Form.Label><strong>Confirm Password *</strong></Form.Label>
-                <Form.Control
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  isInvalid={formData.password !== formData.confirmPassword}
-                />
-                <Form.Control.Feedback type="invalid">Passwords do not match.</Form.Control.Feedback>
-              </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    <strong>Language *</strong>
+                  </Form.Label>
+                  <div>
+                    {(["English", "Tamil", "Sinhala"] as const).map(
+                      (lang, index) => (
+                        <Form.Check
+                          inline
+                          className="pr-5"
+                          key={index}
+                          label={lang}
+                          type="checkbox"
+                          name="languages"
+                          value={lang}
+                          checked={
+                            formData.languages[
+                              lang as keyof typeof formData.languages
+                            ]
+                          }
+                          onChange={handleChange}
+                        />
+                      )
+                    )}
+                  </div>
+                </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label><strong>Language *</strong></Form.Label>
-                <div>
-                  {['English', 'Tamil', 'Sinhala'].map(lang => (
+                <Form.Group className="mb-3" controlId="nicNumber">
+                  <Form.Label>
+                    <strong>NIC number *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nicNumber"
+                    value={formData.nicNumber}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="emergencyContact">
+                  <Form.Label>
+                    <strong>Emergency Contact *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="tel"
+                    name="emergencyContact"
+                    value={formData.emergencyContact}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </>
+            )}
+
+            {/* Step 2 - Business Details */}
+            {step === 2 && (
+              <>
+                <Form.Group className="mb-3" controlId="businessName">
+                  <Form.Label>
+                    <strong>Business Name *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="businessName"
+                    value={formData.businessName}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    <strong>Business Type *</strong>
+                  </Form.Label>
+                  {["Individual", "Registered Company"].map((type) => (
                     <Form.Check
-                      inline
-					  className='pr-5'
-                      key={lang}
-                      label={lang}
-                      type="checkbox"
-                      name="languages"
-                      value={lang}
-                      checked={formData.languages[lang]}
+                      className="mb-2" // Add spacing between radios
+                      key={type}
+                      label={type}
+                      type="radio"
+                      name="businessType"
+                      value={type}
+                      checked={formData.businessType === type}
                       onChange={handleChange}
+                      required
                     />
                   ))}
-                </div>
-              </Form.Group>
+                </Form.Group>
 
-              <Form.Group className="mb-3" controlId="nicNumber">
-                <Form.Label><strong>NIC number *</strong></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="nicNumber"
-                  value={formData.nicNumber}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="businessRegNumber">
+                  <Form.Label>
+                    <strong>Business Registration Number (optional)</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="businessRegNumber"
+                    value={formData.businessRegNumber}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
 
-              <Form.Group className="mb-3" controlId="emergencyContact">
-                <Form.Label><strong>Emergency Contact *</strong></Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="emergencyContact"
-                  value={formData.emergencyContact}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </>
-          )}
+                <Form.Group className="mb-3" controlId="officeAddress">
+                  <Form.Label>
+                    <strong>Office Address *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    name="officeAddress"
+                    value={formData.officeAddress}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-          {/* Step 2 - Business Details */}
-          {step === 2 && (
-            <>
-              <Form.Group className="mb-3" controlId="businessName">
-                <Form.Label><strong>Business Name *</strong></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="businessName"
-                  value={formData.businessName}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="officeContact">
+                  <Form.Label>
+                    <strong>Office Contact Number *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="tel"
+                    name="officeContact"
+                    value={formData.officeContact}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
-              <Form.Group className="mb-3">
-  <Form.Label><strong>Business Type *</strong></Form.Label>
-  {['Individual', 'Registered Company'].map(type => (
-    <Form.Check
-      className='mb-2' // Add spacing between radios
-      key={type}
-      label={type}
-      type="radio"
-      name="businessType"
-      value={type}
-      checked={formData.businessType === type}
-      onChange={handleChange}
-      required
-    />
-  ))}
-</Form.Group>
-
-
-              <Form.Group className="mb-3" controlId="businessRegNumber">
-                <Form.Label><strong>Business Registration Number (optional)</strong></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="businessRegNumber"
-                  value={formData.businessRegNumber}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="officeAddress">
-                <Form.Label><strong>Office Address *</strong></Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={2}
-                  name="officeAddress"
-                  value={formData.officeAddress}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="officeContact">
-                <Form.Label><strong>Office Contact Number *</strong></Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="officeContact"
-                  value={formData.officeContact}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="operatingCity">
-                <Form.Label><strong>Operating City *</strong></Form.Label>
-                <Form.Control
-                  type="text"
-                  name="operatingCity"
-                  value={formData.operatingCity}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </>
-          )}
-
-          {/* Step 3 - Documents Upload */}
-          {step === 3 && (
-            <>
-              <Form.Group className="mb-3" controlId="nicPicture">
-                <Form.Label><strong>NIC Picture *</strong></Form.Label>
-                <Form.Control
-                  type="file"
-                  name="nicPicture"
-                  accept="image/*"
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="brDocument">
-                <Form.Label><strong>Business Registration (optional)</strong></Form.Label>
-                <Form.Control
-                  type="file"
-                  name="brDocument"
-                  accept="image/*,application/pdf"
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="proofOfAddress">
-                <Form.Label><strong>Proof of Address *</strong></Form.Label>
-                <Form.Control
-                  type="file"
-                  name="proofOfAddress"
-                  accept="image/*,application/pdf"
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="rentalAgreement">
-                <Form.Label><strong>Rental Agreement PDF *</strong></Form.Label>
-                <Form.Control
-                  type="file"
-                  name="rentalAgreement"
-                  accept="application/pdf"
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="businessProfilePicture">
-                <Form.Label><strong>Business Profile Picture *</strong></Form.Label>
-                <Form.Control
-                  type="file"
-                  name="businessProfilePicture"
-                  accept="image/*"
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="d-flex justify-content-between mt-4">
-            {step > 1 && (
-              <Button className='btn btn-secondary rounded-3.5' onClick={handleBack}>
-                <ChevronLeft size={18} />
-                Back
-              </Button>
+                <Form.Group className="mb-3" controlId="operatingCity">
+                  <Form.Label>
+                    <strong>Operating City *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="operatingCity"
+                    value={formData.operatingCity}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </>
             )}
-            {step < 3 ? (
-              <Button variant="primary" onClick={handleNext} className="ms-auto">
-                Next
-                <ChevronRight size={18} className="ms-2" />
-              </Button>
-            ) : (
-              <Button className='btn btn-secondary rounded-3.5' type='submit'>
-                Submit
-                <SendHorizonal size={17} className="" />
-              </Button>
+
+            {/* Step 3 - Documents Upload */}
+            {step === 3 && (
+              <>
+                <Form.Group className="mb-3" controlId="nicPicture">
+                  <Form.Label>
+                    <strong>NIC Picture *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="nicPicture"
+                    accept="image/*"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="brDocument">
+                  <Form.Label>
+                    <strong>Business Registration (optional)</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="brDocument"
+                    accept="image/*,application/pdf"
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="proofOfAddress">
+                  <Form.Label>
+                    <strong>Proof of Address *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="proofOfAddress"
+                    accept="image/*,application/pdf"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="rentalAgreement">
+                  <Form.Label>
+                    <strong>Rental Agreement PDF *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="rentalAgreement"
+                    accept="application/pdf"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="businessProfilePicture">
+                  <Form.Label>
+                    <strong>Business Profile Picture *</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="businessProfilePicture"
+                    accept="image/*"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </>
             )}
-          </div>
-        </Form>
-		</div>
+
+            {/* Navigation Buttons */}
+            <div className="d-flex justify-content-between mt-4">
+              {step > 1 && (
+                <Button
+                  className="btn btn-secondary rounded-3.5"
+                  onClick={handleBack}
+                >
+                  <ChevronLeft size={18} />
+                  Back
+                </Button>
+              )}
+              {step < 3 ? (
+                <Button
+                  variant="primary"
+                  onClick={handleNext}
+                  className="ms-auto"
+                >
+                  Next
+                  <ChevronRight size={18} className="ms-2" />
+                </Button>
+              ) : (
+                <Button className="btn btn-secondary rounded-3.5" type="submit">
+                  Submit
+                  <SendHorizonal size={17} className="" />
+                </Button>
+              )}
+            </div>
+          </Form>
+        </div>
       </div>
     </Layout>
-  )
+  );
 }

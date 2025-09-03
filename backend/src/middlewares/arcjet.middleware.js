@@ -1,10 +1,15 @@
 import { aj } from "../configs/arcjet.js";
+import { ENV } from "../configs/env.js";
 
 export const arcjetMiddleware = async (req, res, next) => {
   try {
+    if (ENV.NODE_ENV === "development" || req.path === "/api/health") {
+      return next(); // skip arcjet in dev
+    }
     const decision = await aj.protect(req, {
       requested: 1, // consume 1 token for each request
     });
+    console.log("Arcjet decision:", decision);
     if (decision.isDenied) {
       if (decision.reason.isRateLimit()) {
         res.status(429).json({
