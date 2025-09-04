@@ -7,6 +7,8 @@ import Layout from "@/components/layout/Layout";
 export default function RegisterMultiStep() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const initialFormState = {
     // Step 1 - Personal Details
     fullName: "",
@@ -201,10 +203,11 @@ export default function RegisterMultiStep() {
 
       const data = await res.json();
       if (res.ok) {
-        alert("Registration successful!");
+        setShowSuccessModal(true);
+        // alert("Registration successful!");
         console.log(data);
-        
-          // ✅ reset form
+
+        // ✅ reset form
         setFormData(initialFormState);
         setStep(1); // go back to step 1
       } else {
@@ -233,11 +236,10 @@ export default function RegisterMultiStep() {
                   return (
                     <div
                       key={label}
-                      className={`step-indicator rounded-5 text-center w-50 ${
-                        step === index + 1
+                      className={`step-indicator rounded-5 text-center w-50 ${step === index + 1
                           ? "bg-primary text-black shadow"
                           : "bg-light text-muted"
-                      }`}
+                        }`}
                       style={{
                         width: 120,
                         height: 40,
@@ -346,7 +348,7 @@ export default function RegisterMultiStep() {
                           value={lang}
                           checked={
                             formData.languages[
-                              lang as keyof typeof formData.languages
+                            lang as keyof typeof formData.languages
                             ]
                           }
                           onChange={handleChange}
@@ -561,22 +563,60 @@ export default function RegisterMultiStep() {
               ) : (
                 <Button className="btn btn-secondary rounded-3.5" type="submit" disabled={loading}>
                   {loading ? (
-    <>
-      <span className="spinner-border spinner-border-sm me-2"></span>
-      Submitting...
-    </>
-  ) : (
-    <>
-      Submit
-      <SendHorizonal size={17} className="ms-2" />
-    </>
-  )}
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2"></span>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      Submit
+                      <SendHorizonal size={17} className="ms-2" />
+                    </>
+                  )}
                 </Button>
               )}
             </div>
           </Form>
         </div>
       </div>
+      {showSuccessModal && (
+      <div
+        className="modal fade show d-block"
+        tabIndex={-1}
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content rounded-4 shadow">
+            <div className="modal-header">
+              <h5 className="modal-title">Registration Submitted</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowSuccessModal(false)}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Thank you for submitting your registration form.
+                <br /><br />
+                Our team is currently reviewing the details provided to ensure all information is accurate and complete.  
+                Once the verification process is finalized, we will reach out to you with the next steps.
+                <br /><br />
+                We appreciate your patience and look forward to connecting with you soon.
+              </p>
+            </div>
+            <div className="modal-footer">
+              <Button
+                className="btn btn-primary"
+                onClick={() => setShowSuccessModal(false)}
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
     </Layout>
   );
 }
