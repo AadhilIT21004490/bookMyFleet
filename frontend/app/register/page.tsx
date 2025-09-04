@@ -8,6 +8,11 @@ export default function RegisterMultiStep() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [error, setError] = useState(null);
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const initialFormState = {
     // Step 1 - Personal Details
@@ -112,7 +117,7 @@ export default function RegisterMultiStep() {
       return (
         formData.businessName.trim() !== "" &&
         (formData.businessType === "Individual" ||
-          formData.businessType === "Registered") &&
+          formData.businessType === "Registered Company") &&
         formData.officeAddress.trim() !== "" &&
         formData.officeContact.trim() !== "" &&
         formData.operatingCity.trim() !== ""
@@ -211,15 +216,19 @@ export default function RegisterMultiStep() {
         setFormData(initialFormState);
         setStep(1); // go back to step 1
       } else {
-        alert(data.message || "Registration failed");
+        // alert(data.message || "Registration failed");
+        setError(data.message || "Registration failed");
       }
     } catch (err: any) {
       console.error(err.message);
-      alert("Something went wrong while submitting the form");
+      setError(err.message || "Registration failed");
+      // alert("Something went wrong while submitting the form");
     } finally {
       setLoading(false); // hide loading
     }
   };
+
+  const isPasswordValid = passwordRegex.test(formData.password);
 
   return (
     <Layout footerStyle={1}>
@@ -236,10 +245,11 @@ export default function RegisterMultiStep() {
                   return (
                     <div
                       key={label}
-                      className={`step-indicator rounded-5 text-center w-50 ${step === index + 1
+                      className={`step-indicator rounded-5 text-center w-50 ${
+                        step === index + 1
                           ? "bg-primary text-black shadow"
                           : "bg-light text-muted"
-                        }`}
+                      }`}
                       style={{
                         width: 120,
                         height: 40,
@@ -297,8 +307,24 @@ export default function RegisterMultiStep() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
+                    isInvalid={
+                      formData.phone !== "" &&
+                      !/^(?:\+94|0)7\d{8}$/.test(formData.phone)
+                    }
                     required
                   />
+                  <div className="mt-2 small">
+                    <div
+                      className={
+                        /^(?:\+94|0)7\d{8}$/.test(formData.phone)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/^(?:\+94|0)7\d{8}$/.test(formData.phone) ? "✅" : "❌"}{" "}
+                      Valid Sri Lankan mobile number
+                    </div>
+                  </div>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="password">
@@ -310,8 +336,64 @@ export default function RegisterMultiStep() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    onBlur={() => setPasswordTouched(true)}
+                    isInvalid={passwordTouched && !isPasswordValid}
                     required
                   />
+
+                  {/* ✅ Live password rules checklist */}
+                  <div className="mt-2 small">
+                    <div
+                      className={
+                        /[A-Z]/.test(formData.password)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/[A-Z]/.test(formData.password) ? "✅" : "❌"} At least
+                      one uppercase letter
+                    </div>
+                    <div
+                      className={
+                        /[a-z]/.test(formData.password)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/[a-z]/.test(formData.password) ? "✅" : "❌"} At least
+                      one lowercase letter
+                    </div>
+                    <div
+                      className={
+                        /\d/.test(formData.password)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/\d/.test(formData.password) ? "✅" : "❌"} At least one
+                      number
+                    </div>
+                    <div
+                      className={
+                        /[@$!%*?&]/.test(formData.password)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/[@$!%*?&]/.test(formData.password) ? "✅" : "❌"} At
+                      least one special character
+                    </div>
+                    <div
+                      className={
+                        formData.password.length >= 8
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {formData.password.length >= 8 ? "✅" : "❌"} Minimum 8
+                      characters
+                    </div>
+                  </div>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="confirmPassword">
@@ -348,7 +430,7 @@ export default function RegisterMultiStep() {
                           value={lang}
                           checked={
                             formData.languages[
-                            lang as keyof typeof formData.languages
+                              lang as keyof typeof formData.languages
                             ]
                           }
                           onChange={handleChange}
@@ -381,7 +463,25 @@ export default function RegisterMultiStep() {
                     value={formData.emergencyContact}
                     onChange={handleChange}
                     required
+                    isInvalid={
+                      formData.emergencyContact !== "" &&
+                      !/^(?:\+94|0)7\d{8}$/.test(formData.emergencyContact)
+                    }
                   />
+                  <div className="mt-2 small">
+                    <div
+                      className={
+                        /^(?:\+94|0)7\d{8}$/.test(formData.emergencyContact)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/^(?:\+94|0)7\d{8}$/.test(formData.emergencyContact)
+                        ? "✅"
+                        : "❌"}{" "}
+                      Valid Sri Lankan mobile number
+                    </div>
+                  </div>
                 </Form.Group>
               </>
             )}
@@ -457,7 +557,25 @@ export default function RegisterMultiStep() {
                     value={formData.officeContact}
                     onChange={handleChange}
                     required
+                    isInvalid={
+                      formData.officeContact !== "" &&
+                      !/^(?:\+94|0)7\d{8}$/.test(formData.officeContact)
+                    }
                   />
+                  <div className="mt-2 small">
+                    <div
+                      className={
+                        /^(?:\+94|0)7\d{8}$/.test(formData.officeContact)
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {/^(?:\+94|0)7\d{8}$/.test(formData.officeContact)
+                        ? "✅"
+                        : "❌"}{" "}
+                      Valid Sri Lankan mobile number
+                    </div>
+                  </div>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="operatingCity">
@@ -539,6 +657,7 @@ export default function RegisterMultiStep() {
                 </Form.Group>
               </>
             )}
+            {error && <div className="alert alert-danger">* {error}</div>}
 
             {/* Navigation Buttons */}
             <div className="d-flex justify-content-between mt-4">
@@ -561,62 +680,73 @@ export default function RegisterMultiStep() {
                   <ChevronRight size={18} className="ms-2" />
                 </Button>
               ) : (
-                <Button className="btn btn-secondary rounded-3.5" type="submit" disabled={loading}>
-                  {loading ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm me-2"></span>
-                      Submitting...
-                    </>
-                  ) : (
-                    <>
-                      Submit
-                      <SendHorizonal size={17} className="ms-2" />
-                    </>
-                  )}
-                </Button>
+                <>
+                  <Button
+                    className="btn btn-secondary rounded-3.5"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit
+                        <SendHorizonal size={17} className="ms-2" />
+                      </>
+                    )}
+                  </Button>
+                </>
               )}
             </div>
           </Form>
         </div>
       </div>
       {showSuccessModal && (
-      <div
-        className="modal fade show d-block"
-        tabIndex={-1}
-        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content rounded-4 shadow">
-            <div className="modal-header">
-              <h5 className="modal-title">Registration Submitted</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setShowSuccessModal(false)}
-              ></button>
-            </div>
-            <div className="modal-body">
-              <p>
-                Thank you for submitting your registration form.
-                <br /><br />
-                Our team is currently reviewing the details provided to ensure all information is accurate and complete.  
-                Once the verification process is finalized, we will reach out to you with the next steps.
-                <br /><br />
-                We appreciate your patience and look forward to connecting with you soon.
-              </p>
-            </div>
-            <div className="modal-footer">
-              <Button
-                className="btn btn-primary"
-                onClick={() => setShowSuccessModal(false)}
-              >
-                Close
-              </Button>
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content rounded-4 shadow">
+              <div className="modal-header">
+                <h5 className="modal-title">Registration Submitted</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowSuccessModal(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  Thank you for submitting your registration form.
+                  <br />
+                  <br />
+                  Our team is currently reviewing the details provided to ensure
+                  all information is accurate and complete. Once the
+                  verification process is finalized, we will reach out to you
+                  with the next steps.
+                  <br />
+                  <br />
+                  We appreciate your patience and look forward to connecting
+                  with you soon.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <Button
+                  className="btn btn-primary"
+                  onClick={() => setShowSuccessModal(false)}
+                >
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </Layout>
   );
 }
