@@ -140,7 +140,10 @@ export const register = async (req, res) => {
       });
     }
 
-    if (businessRegNumber && !isValidBrNumber(businessRegNumber)) {
+    if (
+      businessRegNumber.trim() !== "" &&
+      !isValidBrNumber(businessRegNumber)
+    ) {
       return res.status(400).json({
         error: "Invalid BR number",
         message: "Please provide a valid BR number",
