@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       email,
       password,
       phone,
-      languages,
+
       nicNumber,
       emergencyContact,
       businessName,
@@ -27,6 +27,8 @@ export const register = async (req, res) => {
       officeContact,
       operatingCity,
     } = req.body;
+
+    let { languages } = req.body;
 
     // Grab files uploaded by Multer
     const nicPicture = req.files?.nicPicture?.[0]?.filename || null;
@@ -83,6 +85,19 @@ export const register = async (req, res) => {
         message: "Please provide a valid emergency contact",
         success: false,
       });
+    }
+
+    // Parse if string
+    if (typeof languages === "string") {
+      try {
+        languages = JSON.parse(languages);
+      } catch (err) {
+        return res.status(400).json({
+          error: "Invalid languages format",
+          message: "Languages must be a valid JSON object",
+          success: false,
+        });
+      }
     }
 
     if (languages.length < 1) {
@@ -206,6 +221,7 @@ export const register = async (req, res) => {
     });
 
     const savedVendor = await vendor.save();
+
     return res.status(201).json({
       message: "Account created successfully",
       success: true,
