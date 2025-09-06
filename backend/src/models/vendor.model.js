@@ -23,7 +23,7 @@ const vendorSchema = new mongoose.Schema(
       default: "Individual",
     },
     businessRegNumber: { type: String, unique: true },
-    businessOverview: { type: String, required: true },
+    businessOverview: { type: String},
     officeAddress: { type: String, required: true },
     officeContact: { type: String, required: true },
     operatingCity: { type: String, required: true },
@@ -34,6 +34,10 @@ const vendorSchema = new mongoose.Schema(
     proofOfAddress: { type: String, required: true },
     rentalAgreement: { type: String, required: true },
     businessProfilePicture: { type: String, required: true },
+
+    // Step 4 - Payment 
+
+    paymentProof: {type: String, required: true},
 
     // Optional (future use)
     taxId: { type: String },
