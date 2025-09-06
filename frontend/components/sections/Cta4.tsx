@@ -40,7 +40,7 @@ export default function Cta4() {
 								</span>
 								<h6 className=" wow fadeInUp">Want to list your car?</h6>
 								<p className="text-md-regular wow fadeInUp">Join our trusted network of vehicle owners and start earning from day one. Your car, your terms.</p>
-								<Link className="btn btn-primary wow fadeInUp" href="/register">
+								<Link className="btn btn-primary wow fadeInUp" href="/vendor-registration">
 									Get Started Now
 									<svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none">
 										<path d="M12 19L19 12L12 5M19 12L5 12" stroke="#101010" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

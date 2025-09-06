@@ -92,12 +92,12 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, handle
 								<nav className="nav-main-menu">
 									<ul className="main-menu">
 										<li className="has-children arrow-white">
-											<Link className="color-white" href="#">Home</Link>
-											<ul className="sub-menu">
+											<Link className="color-white" href="/">Home</Link>
+											{/* <ul className="sub-menu">
 												<li><Link href="/">Home page v1</Link></li>
 												<li><Link href="/index-2">Home page v2</Link></li>
 												<li><Link href="/index-3">Home page v3</Link></li>
-											</ul>
+											</ul> */}
 										</li>
 										<li className="mega-li-small has-children arrow-white">
 											<Link className="color-white" href="#">Vehicles</Link>
