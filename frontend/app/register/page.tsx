@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Form, Button, Col, Row, InputGroup } from "react-bootstrap";
-import { ChevronLeft, ChevronRight, SendHorizonal } from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, CopyCheck, CopyIcon, SendHorizonal } from "lucide-react";
 import Layout from "@/components/layout/Layout";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function RegisterMultiStep() {
   const [step, setStep] = useState(1);
@@ -27,6 +29,7 @@ export default function RegisterMultiStep() {
 
     // Step 2 - Business Details
     businessName: "",
+    businessOverview:"",
     businessType: "Individual", // default
     businessRegNumber: "",
     officeAddress: "",
@@ -39,34 +42,12 @@ export default function RegisterMultiStep() {
     proofOfAddress: null,
     rentalAgreement: null,
     businessProfilePicture: null,
+
+    // Step 4 - Payment Proof
+    paymentProof: null,
   };
   const [formData, setFormData] = useState(initialFormState);
-  // const [formData, setFormData] = useState({
-  //   // Step 1 - Personal Details
-  //   fullName: "",
-  //   email: "",
-  //   phone: "",
-  //   password: "",
-  //   confirmPassword: "",
-  //   languages: { English: false, Tamil: false, Sinhala: false },
-  //   nicNumber: "",
-  //   emergencyContact: "",
-
-  //   // Step 2 - Business Details
-  //   businessName: "",
-  //   businessType: "Individual", // default
-  //   businessRegNumber: "",
-  //   officeAddress: "",
-  //   officeContact: "",
-  //   operatingCity: "",
-
-  //   // Step 3 - Documentations (files)
-  //   nicPicture: null,
-  //   brDocument: null,
-  //   proofOfAddress: null,
-  //   rentalAgreement: null,
-  //   businessProfilePicture: null,
-  // });
+  
 
   // Helper for input changes (text, radio, checkbox)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,6 +77,32 @@ export default function RegisterMultiStep() {
       }));
     }
   };
+
+  // copy to clipboard function
+  const copyToClipboard = (text: string) => {
+  if (navigator.clipboard && window.isSecureContext) {
+    // Modern method
+    return navigator.clipboard.writeText(text);
+  } else {
+    // Fallback method for older mobile browsers
+    let textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";  // prevent scroll
+    textArea.style.left = "-9999px";    // hide from view
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      document.execCommand("copy");
+    } catch (err) {
+      console.error("Fallback: Oops, unable to copy", err);
+    }
+
+    document.body.removeChild(textArea);
+    return Promise.resolve();
+  }
+};
 
   // Step validation example for moving next
   const isStepValid = () => {
@@ -129,6 +136,11 @@ export default function RegisterMultiStep() {
         formData.proofOfAddress !== null &&
         formData.rentalAgreement !== null &&
         formData.businessProfilePicture !== null
+      );
+    }
+    if (step === 4){
+      return(
+        formData.paymentProof !== null
       );
     }
     return true;
@@ -191,11 +203,16 @@ export default function RegisterMultiStep() {
           "businessProfilePicture",
           formData.businessProfilePicture
         );
-      // todo:add textarea for business overview
-      formDataToSend.append(
+
+      if (formData.businessOverview)
+        formDataToSend.append(
         "businessOverview",
-        "This is a sample business overview. Todo: add a text area for this."
+        formData.businessOverview
       );
+
+      // Step 4 - Payment
+      if (formData.paymentProof)
+        formDataToSend.append("paymentProof",formData.paymentProof);
 
       // 🔑 API call
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/vendor`, {
@@ -237,37 +254,36 @@ export default function RegisterMultiStep() {
         <div className="border rounded-5 shadow my-5 p-5">
           <Form onSubmit={handleSubmit}>
             {/* Step Indicators */}
-            <div className="mb-4 d-flex justify-content-between">
-              {["PERSONAL DETAILS", "BUSINESS DETAILS", "DOCUMENTS"].map(
-                (label, index) => {
-                  const firstWord = label.split(" ")[0]; // Get first word e.g. "PERSONAL"
-
-                  return (
-                    <div
-                      key={label}
-                      className={`step-indicator rounded-5 text-center w-50 ${
-                        step === index + 1
-                          ? "bg-primary text-black shadow"
-                          : "bg-light text-muted"
-                      }`}
-                      style={{
-                        width: 120,
-                        height: 40,
-                        lineHeight: "40px",
-                        cursor: "pointer",
-                        borderRadius: 20,
-                      }}
-                      onClick={() => setStep(index + 1)}
-                    >
-                      <strong>
-                        <span className="d-none d-md-inline">{label}</span>
-                        <span className="d-inline d-md-none">{firstWord}</span>
-                      </strong>
-                    </div>
-                  );
-                }
-              )}
+            <div className="mb-4 d-flex justify-content-between flex-wrap gap-2">
+              {[
+                { number: 1, label: "Personal Details" },
+                { number: 2, label: "Business Details" },
+                { number: 3, label: "Document Uploads" },
+                { number: 4, label: "Payment" },
+              ].map((stepItem) => (
+                <div
+                  key={stepItem.number}
+                  className={`step-indicator d-flex flex-column align-items-center justify-content-center text-center p-2 flex-grow-1 ${
+                    step === stepItem.number
+                      ? "bg-primary text-black shadow"
+                      : "bg-light text-muted"
+                  }`}
+                  style={{
+                    minWidth: 80,   // ensures it doesn't get too small on mobile
+                    maxWidth: 150,  // prevents extra large size on desktop
+                    borderRadius: 12,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setStep(stepItem.number)}
+                >
+                  <strong className="fs-6">{stepItem.number}</strong>
+                  <small className="text-truncate d-block" style={{ fontSize: "0.7rem" }}>
+                    {stepItem.label}
+                  </small>
+                </div>
+              ))}
             </div>
+
 
             {/* Step 1 - Personal Details */}
             {step === 1 && (
@@ -501,6 +517,18 @@ export default function RegisterMultiStep() {
                     required
                   />
                 </Form.Group>
+                <Form.Group className="mb-3" controlId="businessOverview">
+                  <Form.Label>
+                    <strong>Business Overview </strong>
+                  </Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    name="businessOverview"
+                    value={formData.businessOverview}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>
@@ -603,7 +631,7 @@ export default function RegisterMultiStep() {
                   <Form.Control
                     type="file"
                     name="nicPicture"
-                    accept="image/*"
+                    accept="image/*,application/pdf"
                     onChange={handleChange}
                     required
                   />
@@ -638,7 +666,7 @@ export default function RegisterMultiStep() {
                   <Form.Control
                     type="file"
                     name="rentalAgreement"
-                    accept="application/pdf"
+                    accept="image/*,application/pdf"
                     onChange={handleChange}
                     required
                   />
@@ -651,6 +679,107 @@ export default function RegisterMultiStep() {
                     type="file"
                     name="businessProfilePicture"
                     accept="image/*"
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </>
+            )}
+            {/* Step 4 - Payment Upload */}
+            {step === 4 && (
+              <>
+                <div className="col-lg-12 col-sm-6">
+									<div className="card-contact">
+										<div className="card-image">
+											<div className="card-icon background-card border rounded-2 border-dark">
+												<Image
+                        src={"/assets/imgs/banks/hnb.png"}
+                        height={45}
+                        width={50}
+                        alt="hnb logo"
+                        />
+											</div>
+										</div>
+										<div className="card-info">
+											<div className="card-title">
+												<Link className="title text-lg-bold" href="#">Hatton National Bank</Link>
+												<p className="text-md-medium neutral-500"><strong>Account Holder Name : </strong>Aadhil Shihabdeen</p>
+												<p className="text-md-medium neutral-500"><strong>Account Number :</strong> 078020095299</p>
+												<p className="text-md-medium neutral-500"><strong>Branch :</strong> Akkaraipattu</p>
+											</div>
+											<div>
+                        <button
+                          type="button"
+                          className="btn btn-link email text-md-bold p-0"
+                          onClick={() => {
+                            const bankDetails = `078020095299`;
+
+                            copyToClipboard(bankDetails).then(() => {
+                              alert("Account number copied to clipboard!");
+                            });
+                          }}
+                        >
+                          Copy account number<Copy size={15} className="ml-2" />
+                        </button>
+                      </div>
+										</div>
+									</div>
+								</div>
+                <div className="col-lg-12 col-sm-6">
+                  <div className="card-contact">
+                    <div className="card-image">
+                      <div className="card-icon background-card border rounded-2 border-dark">
+                        <Image
+                          src={"/assets/imgs/banks/combank.png"}
+                          height={45}
+                          width={50}
+                          alt="combank logo"
+                        />
+                      </div>
+                    </div>
+                    <div className="card-info">
+                      <div className="card-title">
+                        <Link className="title text-lg-bold" href="#">
+                          Commercial Bank
+                        </Link>
+                        <p className="text-md-medium neutral-500">
+                          <strong>Account Holder Name : </strong>J.A. Aathil
+                        </p>
+                        <p className="text-md-medium neutral-500">
+                          <strong>Account Number :</strong> 8172009760
+                        </p>
+                        <p className="text-md-medium neutral-500">
+                          <strong>Branch :</strong> Akkaraipattu
+                        </p>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          className="btn btn-link email text-md-bold p-0"
+                          onClick={() => {
+                            const bankDetails = `8172009760`;
+
+                            copyToClipboard(bankDetails).then(() => {
+                              alert("Account number copied to clipboard!");
+                            });
+                          }}
+                        >
+                          Copy account number <Copy size={15} className="ml-2" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <Form.Group className="mb-3" controlId="paymentProof">
+                  <Form.Label>
+                    <strong>Payment Proof*</strong>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="paymentProof"
+                    accept="image/*,application/pdf"
                     onChange={handleChange}
                     required
                   />
@@ -670,7 +799,7 @@ export default function RegisterMultiStep() {
                   Back
                 </Button>
               )}
-              {step < 3 ? (
+              {step < 4 ? (
                 <Button
                   variant="primary"
                   onClick={handleNext}

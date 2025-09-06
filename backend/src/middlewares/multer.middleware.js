@@ -40,4 +40,5 @@ export const uploadVendorDocs = multer({
   { name: "proofOfAddress", maxCount: 1 },
   { name: "rentalAgreement", maxCount: 1 },
   { name: "businessProfilePicture", maxCount: 1 },
+   { name: "paymentProof", maxCount: 1 }, 
 ]);

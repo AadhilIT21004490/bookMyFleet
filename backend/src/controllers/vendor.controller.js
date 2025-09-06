@@ -16,7 +16,6 @@ export const register = async (req, res) => {
       email,
       password,
       phone,
-
       nicNumber,
       emergencyContact,
       businessName,
@@ -35,6 +34,7 @@ export const register = async (req, res) => {
     const brDocument = req.files?.brDocument?.[0]?.filename || null;
     const proofOfAddress = req.files?.proofOfAddress?.[0]?.filename || null;
     const rentalAgreement = req.files?.rentalAgreement?.[0]?.filename || null;
+    const paymentProof = req.files?.paymentProof?.[0]?.filename || null;
     const businessProfilePicture =
       req.files?.businessProfilePicture?.[0]?.filename || null;
 
@@ -48,12 +48,13 @@ export const register = async (req, res) => {
       !emergencyContact ||
       !businessName ||
       !businessType ||
-      !businessOverview ||
       !officeAddress ||
       !officeContact ||
       !operatingCity ||
       !nicPicture ||
-      !proofOfAddress
+      !proofOfAddress ||
+      !paymentProof
+
     ) {
       return res.status(400).json({
         error: "Missing required fields",
@@ -159,13 +160,7 @@ export const register = async (req, res) => {
       });
     }
 
-    if (!businessOverview) {
-      return res.status(400).json({
-        error: "Invalid business overview",
-        message: "Please provide a valid business overview",
-        success: false,
-      });
-    }
+   
     // validate inputs ends
 
     // db level validation for uniqueness starts
@@ -221,6 +216,7 @@ export const register = async (req, res) => {
       proofOfAddress,
       rentalAgreement,
       businessProfilePicture,
+      paymentProof
     });
 
     const savedVendor = await vendor.save();
