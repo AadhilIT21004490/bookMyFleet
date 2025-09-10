@@ -54,6 +54,8 @@ const vendorSchema = new mongoose.Schema(
       default: [],
     },
     paymentProof: { type: String, required: true },
+    lastPaymentDate: { type: Date, default: Date.now },
+    accountValidTill: { type: Date },
 
     // Optional (future use)
     taxId: { type: String },
