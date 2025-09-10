@@ -8,6 +8,7 @@ import {
   isValidPhone,
 } from "../utils/validators.js";
 import Vendor from "../models/vendor.model.js";
+import { generateVendorId } from "../utils/generateVendorId.js";
 
 export const register = async (req, res) => {
   try {
@@ -54,7 +55,6 @@ export const register = async (req, res) => {
       !nicPicture ||
       !proofOfAddress ||
       !paymentProof
-
     ) {
       return res.status(400).json({
         error: "Missing required fields",
@@ -160,7 +160,6 @@ export const register = async (req, res) => {
       });
     }
 
-   
     // validate inputs ends
 
     // db level validation for uniqueness starts
@@ -194,9 +193,10 @@ export const register = async (req, res) => {
     }
     // db level validation for uniqueness ends
 
-    // todo: need to implement file upload here or in the middleware
+    const vendorId = await generateVendorId();
 
     const vendor = new Vendor({
+      vendorId,
       fullName,
       email,
       password: bcrypt.hashSync(password, 10),
@@ -216,7 +216,7 @@ export const register = async (req, res) => {
       proofOfAddress,
       rentalAgreement,
       businessProfilePicture,
-      paymentProof
+      paymentProof,
     });
 
     const savedVendor = await vendor.save();

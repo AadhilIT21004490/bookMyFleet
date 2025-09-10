@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
-
 const vendorSchema = new mongoose.Schema(
   {
+    // meta
+    vendorId: { type: String, required: true, unique: true },
+    role: {
+      type: String,
+      default: "vendor",
+    },
     // Step 1 - Personal
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -23,7 +28,7 @@ const vendorSchema = new mongoose.Schema(
       default: "Individual",
     },
     businessRegNumber: { type: String, unique: true },
-    businessOverview: { type: String},
+    businessOverview: { type: String },
     officeAddress: { type: String, required: true },
     officeContact: { type: String, required: true },
     operatingCity: { type: String, required: true },
@@ -35,9 +40,20 @@ const vendorSchema = new mongoose.Schema(
     rentalAgreement: { type: String, required: true },
     businessProfilePicture: { type: String, required: true },
 
-    // Step 4 - Payment 
-
-    paymentProof: {type: String, required: true},
+    // Step 4 - Payment
+    paymentHistory: {
+      type: [
+        {
+          paymentId: { type: String, required: true },
+          amount: { type: Number, required: true },
+          paymentDate: { type: Date, default: Date.now }, // auto-fill with current date
+          paymentMethod: { type: String, required: true },
+          proofDocument: { type: String, required: true },
+        },
+      ],
+      default: [],
+    },
+    paymentProof: { type: String, required: true },
 
     // Optional (future use)
     taxId: { type: String },
@@ -56,6 +72,7 @@ const vendorSchema = new mongoose.Schema(
     // Status flags
     isVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: false },
+    isPrimeUser: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
