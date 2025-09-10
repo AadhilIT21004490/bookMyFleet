@@ -32,6 +32,7 @@ const vendorSchema = new mongoose.Schema(
     officeAddress: { type: String, required: true },
     officeContact: { type: String, required: true },
     operatingCity: { type: String, required: true },
+    services: { type: Array, default: [] },
 
     // Step 3 - Documents (store file paths/URLs)
     nicPicture: { type: String, required: true },
@@ -56,6 +57,14 @@ const vendorSchema = new mongoose.Schema(
     paymentProof: { type: String, required: true },
     lastPaymentDate: { type: Date, default: Date.now },
     accountValidTill: { type: Date },
+
+    // Step-5 fleets
+    fleets: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Fleet",
+      },
+    ],
 
     // Optional (future use)
     taxId: { type: String },
