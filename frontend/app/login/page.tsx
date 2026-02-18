@@ -1,7 +1,42 @@
-
+'use client'
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
+import { useState } from "react"
+import { useAuth } from "@/context/AuthProvider"
+
 export default function Login() {
+    const { login } = useAuth()
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError("")
+        setLoading(true)
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            })
+            
+            const data = await res.json()
+            
+            if (res.ok) {
+                login(data)
+            } else {
+                setError(data.message || "Login failed")
+            }
+        } catch (err) {
+            setError("Something went wrong. Please try again.")
+            console.error(err)
+        } finally {
+            setLoading(false)
+        }
+    }
 
 	return (
 		<>
@@ -17,12 +52,27 @@ export default function Login() {
 										<h4 className="neutral-1000">Welcome back</h4>
 									</div>
 									<div className="form-login mt-30">
-										<form action="#">
+										<form onSubmit={handleSubmit}>
+                                            {error && <div className="alert alert-danger">{error}</div>}
 											<div className="form-group">
-												<input className="form-control username" type="text" placeholder="Email / Username" />
+												<input 
+                                                    className="form-control username" 
+                                                    type="text" 
+                                                    placeholder="Email / Username"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    required
+                                                />
 											</div>
 											<div className="form-group">
-												<input className="form-control password" type="password" placeholder="****************" />
+												<input 
+                                                    className="form-control password" 
+                                                    type="password" 
+                                                    placeholder="****************"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    required
+                                                />
 											</div>
 											<div className="form-group">
 												<div className="box-remember-forgot">
@@ -33,11 +83,12 @@ export default function Login() {
 												</div>
 											</div>
 											<div className="form-group mb-30">
-												<Link className="btn btn-primary w-100" href="#">Sign in
+												<button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                                                    {loading ? "Signing in..." : "Sign in"}
 													<svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 														<path d="M8 15L15 8L8 1M15 8L1 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
 													</svg>
-												</Link>
+												</button>
 											</div>
 											<p className="text-md-medium neutral-500 text-center">Or connect with your social account</p>
 											<div className="box-button-logins">
@@ -52,7 +103,8 @@ export default function Login() {
 													<img src="/assets/imgs/template/popup/apple.svg" alt="Carento" />
 												</Link>
 											</div>
-											<p className="text-sm-medium neutral-500 text-center mt-70">Don’t have an account? <Link className="neutral-1000" href="/register">Register Here !</Link></p>
+											<p className="text-sm-medium neutral-500 text-center mt-70">Don’t have an account? <Link className="neutral-1000" href="/register/customer">Register Here !</Link></p>
+                                            <p className="text-sm-medium neutral-500 text-center mt-2">Vendor? <Link className="neutral-1000" href="/register">Register Here</Link></p>
 										</form>
 									</div>
 								</div>
