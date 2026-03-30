@@ -6,6 +6,7 @@ import {
   getVendorProfile, updateVendorProfile,
 } from "../controllers/vendor.dashboard.controller.js";
 import { protect, vendorOnly } from "../middlewares/auth.middleware.js";
+import { uploadVehicleImages } from "../middlewares/multer.middleware.js";
 
 const router = express.Router();
 
@@ -16,8 +17,8 @@ router.get("/dashboard", getVendorDashboard);
 
 // Vehicles
 router.get("/vehicles", getMyVehicles);
-router.post("/vehicles", addVehicle);
-router.put("/vehicles/:id", updateVehicle);
+router.post("/vehicles", uploadVehicleImages, addVehicle);
+router.put("/vehicles/:id", uploadVehicleImages, updateVehicle);
 router.delete("/vehicles/:id", deleteVehicle);
 
 // Bookings

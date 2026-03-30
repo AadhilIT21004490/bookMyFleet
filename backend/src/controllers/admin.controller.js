@@ -69,7 +69,12 @@ export const getVendorById = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id).select("-password");
     if (!vendor) return res.status(404).json({ message: "Vendor not found" });
-    res.json(vendor);
+
+    const totalVehicles = await Vehicle.countDocuments({ vendor: vendor._id });
+    const totalBookings = await Booking.countDocuments({ vendor: vendor._id });
+    const activeVehiclesList = await Vehicle.find({ vendor: vendor._id, isActive: true, isApproved: true }).sort({ createdAt: -1 });
+
+    res.json({ vendor, totalVehicles, totalBookings, activeVehiclesList });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -108,14 +113,15 @@ export const toggleVendorBlock = async (req, res) => {
     const vendor = await Vendor.findById(req.params.id);
     if (!vendor) return res.status(404).json({ message: "Vendor not found" });
 
-    vendor.isActive = !vendor.isActive;
-    await vendor.save();
+    const newIsActive = !vendor.isActive;
+    await Vendor.updateOne({ _id: vendor._id }, { isActive: newIsActive });
 
     // If blocking, hide all their vehicles
-    if (!vendor.isActive) {
+    if (!newIsActive) {
       await Vehicle.updateMany({ vendor: vendor._id }, { isActive: false });
     }
 
+    vendor.isActive = newIsActive;
     res.json({ message: `Vendor ${vendor.isActive ? "unblocked" : "blocked"}`, vendor });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -144,8 +150,11 @@ export const toggleUserActive = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
-    user.isActive = !user.isActive;
-    await user.save();
+    
+    const newIsActive = !user.isActive;
+    await User.updateOne({ _id: user._id }, { isActive: newIsActive });
+    
+    user.isActive = newIsActive;
     res.json({ message: `User ${user.isActive ? "activated" : "deactivated"}`, user });
   } catch (error) {
     res.status(500).json({ message: error.message });

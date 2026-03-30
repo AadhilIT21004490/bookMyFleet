@@ -40,7 +40,26 @@ export const getMyVehicles = async (req, res) => {
 
 export const addVehicle = async (req, res) => {
   try {
+    let images = [];
+    if (req.body.existingImages) {
+      images = Array.isArray(req.body.existingImages) ? req.body.existingImages : [req.body.existingImages];
+    }
+    if (req.files && req.files.length > 0) {
+      const baseUrl = process.env.API_URL ? process.env.API_URL.replace(/\/api\/?$/, "") : `${req.protocol}://${req.get("host")}`;
+      const newImages = req.files.map(file => `${baseUrl}/uploads/vehicles/${file.filename}`);
+      images = [...images, ...newImages];
+    }
+
+    let features = [];
+    if (typeof req.body.features === "string") {
+      try { features = JSON.parse(req.body.features); } catch(e) { features = req.body.features.split(","); }
+    } else if (Array.isArray(req.body.features)) {
+      features = req.body.features;
+    }
+
     const vehicle = new Vehicle({ ...req.body, vendor: req.user._id, isApproved: false });
+    vehicle.features = features;
+    vehicle.images = images;
     const saved = await vehicle.save();
     res.status(201).json(saved);
   } catch (error) {
@@ -52,7 +71,35 @@ export const updateVehicle = async (req, res) => {
   try {
     const vehicle = await Vehicle.findOne({ _id: req.params.id, vendor: req.user._id });
     if (!vehicle) return res.status(404).json({ message: "Vehicle not found" });
-    Object.assign(vehicle, req.body);
+
+    let images = [];
+    if (req.body.existingImages) {
+      images = Array.isArray(req.body.existingImages) ? req.body.existingImages : [req.body.existingImages];
+    }
+    if (req.files && req.files.length > 0) {
+      const baseUrl = process.env.API_URL ? process.env.API_URL.replace(/\/api\/?$/, "") : `${req.protocol}://${req.get("host")}`;
+      const newImages = req.files.map(file => `${baseUrl}/uploads/vehicles/${file.filename}`);
+      images = [...images, ...newImages];
+    }
+
+    let features = [];
+    if (typeof req.body.features === "string") {
+      try { features = JSON.parse(req.body.features); } catch(e) { features = req.body.features.split(","); }
+    } else if (Array.isArray(req.body.features)) {
+      features = req.body.features;
+    }
+
+    const allowed = ["brand", "model", "year", "fuelType", "transmission", "seats", "luggageCapacity", "category", "pricePerDay1Week", "pricePerDay2Weeks", "pricePerDay3Weeks", "pricePerDay1Month", "pricePerDay3Months", "pricePerDay6Months"];
+    allowed.forEach(k => {
+      if (req.body[k] !== undefined) {
+        vehicle[k] = req.body[k];
+      }
+    });
+
+    vehicle.features = features;
+    vehicle.images = images;
+    vehicle.markModified('images');
+    vehicle.markModified('features');
     const saved = await vehicle.save();
     res.json(saved);
   } catch (error) {

@@ -8,6 +8,7 @@ const emptyVehicle = {
   transmission: 'Automatic', seats: 5, luggageCapacity: 2, category: 'Sedan',
   features: '', pricePerDay1Week: '', pricePerDay2Weeks: '', pricePerDay3Weeks: '',
   pricePerDay1Month: '', pricePerDay3Months: '', pricePerDay6Months: '',
+  images: []
 }
 
 export default function VendorVehiclesPage() {
@@ -35,21 +36,61 @@ export default function VendorVehiclesPage() {
   const openAdd = () => { setEditing(null); setForm(emptyVehicle); setShowModal(true) }
   const openEdit = (v: any) => {
     setEditing(v)
-    setForm({ ...v, features: v.features?.join(', ') || '' })
+    setForm({ ...v, features: v.features?.join(', ') || '', images: v.images || [] })
     setShowModal(true)
+  }
+
+  const handleImageChange = (e: any) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).map((file: any) => ({
+        url: URL.createObjectURL(file),
+        file
+      }));
+      const currentImages = form.images || [];
+      if (currentImages.length + newFiles.length > 5) {
+        alert("You can only upload up to 5 images.");
+        return;
+      }
+      setForm({ ...form, images: [...currentImages, ...newFiles] });
+    }
+  }
+
+  const removeImage = (index: number) => {
+    const newImages = [...(form.images || [])];
+    newImages.splice(index, 1);
+    setForm({ ...form, images: newImages });
   }
 
   const handleSave = async () => {
     setSaving(true)
     try {
-      const body = { ...form, features: form.features.split(',').map((f: string) => f.trim()).filter(Boolean) }
+      const formData = new FormData()
+      Object.keys(form).forEach(key => {
+        if (key === 'features') {
+          const feats = form.features.split(',').map((f: string) => f.trim()).filter(Boolean)
+          formData.append('features', JSON.stringify(feats))
+        } else if (key === 'images') {
+          form.images?.forEach((img: any) => {
+            if (img.file) {
+              formData.append('images', img.file)
+            } else if (img.url || typeof img === 'string') {
+              formData.append('existingImages', typeof img === 'string' ? img : img.url)
+            }
+          })
+        } else if (Array.isArray(form[key])) {
+          formData.append(key, JSON.stringify(form[key]))
+        } else {
+          formData.append(key, form[key])
+        }
+      })
+
       const url = editing
         ? `${process.env.NEXT_PUBLIC_API_URL}/vendor-dashboard/vehicles/${editing._id}`
         : `${process.env.NEXT_PUBLIC_API_URL}/vendor-dashboard/vehicles`
       const res = await fetch(url, {
         method: editing ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user?.token}` },
-        body: JSON.stringify(body)
+        headers: { Authorization: `Bearer ${user?.token}` },
+        body: formData
       })
       if (res.ok) { setShowModal(false); fetchVehicles() }
     } catch (e) { console.error(e) }
@@ -178,6 +219,25 @@ export default function VendorVehiclesPage() {
               <input value={form.features} onChange={e => setForm({ ...form, features: e.target.value })}
                 placeholder="AC, GPS, Baby Seat, ..."
                 style={{ width: '100%', padding: '8px 10px', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13 }} />
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 12, fontWeight: 600, color: '#475569', display: 'block', marginBottom: 4 }}>Vehicle Images (Up to 5)</label>
+              <input type="file" multiple accept="image/*" onChange={handleImageChange} disabled={(form.images?.length || 0) >= 5}
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, marginBottom: 10, background: '#f8fafc' }} />
+              
+              {form.images?.length > 0 && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12 }}>
+                  {form.images.map((img: any, idx: number) => (
+                    <div key={idx} style={{ position: 'relative', width: '100%', paddingTop: '56.25%', borderRadius: 8, overflow: 'hidden', border: '1px solid #e2e8f0', background: '#e2e8f0' }}>
+                      <img src={typeof img === 'string' ? img : img.url} alt={`Preview ${idx + 1}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <button onClick={(e) => { e.preventDefault(); removeImage(idx); }} style={{ position: 'absolute', top: 4, right: 4, background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', padding: 4, cursor: 'pointer', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} title="Remove image">
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
               <button onClick={() => setShowModal(false)} style={{ flex: 1, padding: '10px', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', cursor: 'pointer', fontSize: 14 }}>Cancel</button>
