@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import { connectDB } from "./configs/db.js";
 import { ENV } from "./configs/env.js";
 import { arcjetMiddleware } from "./middlewares/arcjet.middleware.js";
@@ -21,6 +22,12 @@ app.use(cors());
 app.use(arcjetMiddleware);
 
 const port = ENV.PORT || 8001;
+
+// Define __dirname since we're using ES modules
+const __dirname = path.resolve();
+
+// Serve static uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/health", (req, res) =>
